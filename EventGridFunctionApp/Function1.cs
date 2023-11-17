@@ -13,8 +13,12 @@ namespace EventGridFunctionApp
 {
     public class EventGridFunction
     {
-        private readonly IEventGridService _eventGrid;
-        public EventGridFunction(IEventGridService _eventGrid) { }
+        private readonly IStoargeQueueService _stoargeQueue;
+        private readonly ICosmoDbService _cosmoDB;
+        public EventGridFunction(IStorageQueueService storageQueue,ICosmoDbService cosmoDbService) {
+            _storageQueue=storageQueue;
+            _cosmoDB=_cosmoDB;
+         }
         [FunctionName("TriggerByEventGrid")]
         public async Task<IActionResult> MessageHandlingForEventGrid(
             [EventGridTrigger] EventGridEvent eventGridEvent)
@@ -25,6 +29,26 @@ namespace EventGridFunctionApp
 
             // Deserialize the request body into MessagingModel
             MessagingModel message = JsonConvert.DeserializeObject<MessagingModel>(requestBody);
+
+            // Validate if the message is null or empty
+            if (message == null || string.IsNullOrEmpty(message.Name))
+            {
+                return new BadRequestObjectResult("Please provide valid data in the request body.");
+            }
+
+            // Send data to CosmoDbConnect class
+            try
+            {
+                await _cosmoDB.SaveToCosmosDB(message);
+                string responseMessage = $"Hello, {message.Name}. This HTTP triggered function executed successfully.";
+
+                return new OkObjectResult(responseMessage);
+            }
+            catch (Exception ex)
+            {
+                await _stoargeQueue.SendMessageToQueueAsync(message,ex.Message);
+                    return new OkObjectResult(ex.Message);
+            }MessagingModel message = JsonConvert.DeserializeObject<MessagingModel>(requestBody);
 
             // Validate if the message is null or empty
             if (message == null || string.IsNullOrEmpty(message.Name))

@@ -15,13 +15,14 @@ namespace HttpFunctionApp
     {
         private readonly ILogger _log;
         private readonly IStoargeQueueService _stoargeQueue;
-        
+       private readonly IEventGridService _eventGrid;
         private readonly ICosmoDbService _cosmoDB;
-        public HttpTriggerAttribute(ILogger log,IStoargeQueueService stoargeQueue,ICosmoDbService _cosmoDB)
+        public HttpTriggerAttribute(ILogger log,IStoargeQueueService stoargeQueue,ICosmoDbService cosmoDB,IEventGridService eventGridService)
         {
             _log = log;
             _stoargeQueue = stoargeQueue;
-            _cosmoDB = _cosmoDB;
+            _eventGrid=eventGridService;
+            _cosmoDB = cosmoDB;
             
         }
         [FunctionName("HttpTriggerForMessage")]
