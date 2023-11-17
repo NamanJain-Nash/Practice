@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "0cyfaL+m6Q21vc33HSxsnQLBGU1/7kSJu6Fdg0igdi7ODSewLKOogtv5hDxKUwhukUZdE0LiCz8YWYC/4QxDCw==",
+  "dgSpecHash": "WExqm+DXkNKCKSUZYnbJcPmG10rY93Eoyf8jCzx60NfFWrS0cC3cbb6uG52LeUDMxM3pguxcF54uOhpwHANL5Q==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Lenovo\\source\\repos\\FunctionApp1\\Models\\DatabaseModel.csproj",
+  "projectFilePath": "/home/nashtech/work/AzureFunctionPractice/AzureFunction/Models/DatabaseModel.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
