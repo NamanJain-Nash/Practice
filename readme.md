@@ -19,5 +19,6 @@
 <p>Services that are being used are</p>
 <ul>
 <li>Cosmos Db Service this is the one that take the data and saves that data into the desired cosmos db of the connection that is their</li>
-<li>Event Grid Sevrice this is used to send the data to the event grid</li>
+<li>Event hub Sevrice this is used to send the data to the event hub function</li>
+<li>Making of the handling of the stroge queue</li>
 </ul>

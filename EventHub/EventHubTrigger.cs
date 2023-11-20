@@ -17,15 +17,21 @@ namespace EventHub
         private readonly ILogger _log;
         private readonly IStoargeQueueService _stoargeQueue;
         private readonly ICosmoDbService _cosmoDB;
-        public EventHubTrigger(ILogger log, IStoargeQueueService stoargeQueue, ICosmoDbService _cosmoDB)
+        private readonly string connectionstring;
+        private readonly IConfiguration _config;
+        private readonly string Eventname;
+        public EventHubTrigger(IConfiguration config,ILogger log, IStoargeQueueService stoargeQueue, ICosmoDbService cosmoDB)
         {
             _log = log;
             _stoargeQueue = stoargeQueue;
-            _cosmoDB = _cosmoDB;
+            _cosmoDB = cosmoDB;
+            _config=config;
+            Eventname=_config["eventname"];
+            connectionstring=config["EventHubconnectionstring"]
 
         }
         [FunctionName("EventHandler")]
-        public async Task Run([EventHubTrigger("EventHubHandler", Connection = "")] EventData[] events)
+        public async Task Run([EventHubTrigger(Eventname, Connection = connectionstring,ConsumerGroup = "$Default")] EventData[] events)
         {
             foreach (EventData eventData in events)
             {
