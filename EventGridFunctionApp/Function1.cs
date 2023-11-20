@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using System.Threading.Tasks;
 using Services.IServices;
 using DatabaseModel;
+using Azure.Messaging.EventHubs;
 
 namespace EventGridFunctionApp
 {
@@ -17,18 +18,19 @@ namespace EventGridFunctionApp
     {
         private readonly IStoargeQueueService _stoargeQueue;
         private readonly ICosmoDbService _cosmoDB;
-        private readonly IEventGridService _eventGrid;
+        private readonly IEventHubService _eventGrid;
         private readonly ILogger _log;
-        public EventGridFunction(IStoargeQueueService storageQueue,ICosmoDbService cosmoDbService, ILogger log, IEventGridService eventGrid)
+        public EventGridFunction(IStoargeQueueService storageQueue,ICosmoDbService cosmoDbService, ILogger log, IEventHubService eventGrid)
         {
             _stoargeQueue = storageQueue;
             _cosmoDB = cosmoDbService;
             _log = log;
             _eventGrid = eventGrid;
         }
-        [FunctionName("TriggerByEventGrid")]
+        [FunctionName("TriggerByEventHub")]
         public async Task<IActionResult> MessageHandlingForEventGrid(
-            [EventGridTrigger] EventGridEvent eventGridEvent)
+            [EventHubTrigger("yourEventHubName", Connection = "EventHubConnectionString")] EventData[] events,
+    ILogger log)
         {
             _log.LogInformation("C# HTTP trigger function processed a request.");
 
@@ -55,27 +57,6 @@ namespace EventGridFunctionApp
             {
                 await _stoargeQueue.SendMessageToQueueAsync(message,ex.Message);
                     return new OkObjectResult(ex.Message);
-            }
-            message = JsonConvert.DeserializeObject<MessageingModel>(requestBody);
-
-            // Validate if the message is null or empty
-            if (message == null || string.IsNullOrEmpty(message.Id))
-            {
-                return new BadRequestObjectResult("Please provide valid data in the request body.");
-            }
-
-            // Send data to CosmoDbConnect class
-            try
-            {
-                await _eventGrid.SendEventAsync(message);
-                string responseMessage = $"Hello, {message.Message}. This HTTP triggered function executed successfully.";
-
-                return new OkObjectResult(responseMessage);
-            }
-            catch (Exception ex)
-            {
-                await _stoargeQueue.SendMessageToQueueAsync(message, ex.Message);
-                return new OkObjectResult(ex.Message);
             }
         }
     }

@@ -7,7 +7,7 @@ using DatabaseModel;
 
 namespace Services.IServices
 {
-    public interface IEventGridService
+    public interface IEventHubService
     {
         public Task<string> SendEventAsync(MessageingModel eventData);
     }

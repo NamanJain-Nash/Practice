@@ -17,11 +17,11 @@ namespace MessageTriggerFunctionApp
         private readonly ILogger _log;
         private readonly IStoargeQueueService _stoargeQueue;
         private readonly ICosmoDbService _cosmoDB;
-        public MessageTriggerFunction(ILogger log, IStoargeQueueService stoargeQueue, ICosmoDbService _cosmoDB)
+        public MessageTriggerFunction(ILogger log, IStoargeQueueService stoargeQueue, ICosmoDbService cosmoDB)
         {
             _log = log;
             _stoargeQueue = stoargeQueue;
-            _cosmoDB = _cosmoDB;
+            _cosmoDB = cosmoDB;
 
         }
         [FunctionName("HttpTriggerForMessage")]

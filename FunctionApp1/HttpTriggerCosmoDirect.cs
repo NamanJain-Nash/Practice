@@ -16,9 +16,9 @@ namespace HttpFunctionApp
     {
         private readonly ILogger _log;
         private readonly IStoargeQueueService _stoargeQueue;
-       private readonly IEventGridService _eventGrid;
+       private readonly IEventHubService _eventGrid;
         private readonly ICosmoDbService _cosmoDB;
-        public HttpTriggerCosmoDirect(ILogger log,IStoargeQueueService stoargeQueue,ICosmoDbService cosmoDB,IEventGridService eventGridService)
+        public HttpTriggerCosmoDirect(ILogger log,IStoargeQueueService stoargeQueue,ICosmoDbService cosmoDB,IEventHubService eventGridService)
         {
             _log = log;
             _stoargeQueue = stoargeQueue;

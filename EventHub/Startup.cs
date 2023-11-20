@@ -11,15 +11,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Services.IServices;
 using Services.Services;
 
-namespace EventGridFunctionApp
+namespace EventHub
 {
     public class Startup : FunctionsStartup
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
+            builder.Services.AddTransient<ICosmoDbService, CosmoDbService>();
             builder.Services.AddTransient<IStoargeQueueService, StoargeQueueService>();
-            builder.Services.AddTransient<ICosmoDbService,CosmoDbService>();
-            builder.Services.AddTransient<IEventHubService, EventHubService>();
+            builder.Services.AddTransient<IEventHubService,EventHubService>();
             builder.Services.AddLogging();
         }
         public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)

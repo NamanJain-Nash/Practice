@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "WExqm+DXkNKCKSUZYnbJcPmG10rY93Eoyf8jCzx60NfFWrS0cC3cbb6uG52LeUDMxM3pguxcF54uOhpwHANL5Q==",
+  "dgSpecHash": "G89aB5CsbLsC+P0K33dIIpCkJM9bo9iR1CWNW+8QZrILT8YzZ0gCberl9pjOAn/4T/a8toRTHSHVgvBogKLikA==",
   "success": true,
-  "projectFilePath": "/home/nashtech/work/AzureFunctionPractice/AzureFunction/Models/DatabaseModel.csproj",
+  "projectFilePath": "A:\\NashtechProject\\Project\\Practice\\Models\\DatabaseModel.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
