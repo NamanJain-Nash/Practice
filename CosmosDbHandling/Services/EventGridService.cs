@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.EventGrid;
+﻿using DatabaseModel;
+using Microsoft.Azure.EventGrid;
 using Microsoft.Azure.EventGrid.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;

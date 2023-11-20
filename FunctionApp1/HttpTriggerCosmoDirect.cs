@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Services.IServices;
+using DatabaseModel;
 
 namespace HttpFunctionApp
 {
@@ -17,7 +18,7 @@ namespace HttpFunctionApp
         private readonly IStoargeQueueService _stoargeQueue;
        private readonly IEventGridService _eventGrid;
         private readonly ICosmoDbService _cosmoDB;
-        public HttpTriggerAttribute(ILogger log,IStoargeQueueService stoargeQueue,ICosmoDbService cosmoDB,IEventGridService eventGridService)
+        public HttpTriggerCosmoDirect(ILogger log,IStoargeQueueService stoargeQueue,ICosmoDbService cosmoDB,IEventGridService eventGridService)
         {
             _log = log;
             _stoargeQueue = stoargeQueue;
@@ -34,10 +35,10 @@ namespace HttpFunctionApp
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
 
             // Deserialize the request body into MessagingModel
-            MessagingModel message = JsonConvert.DeserializeObject<MessagingModel>(requestBody);
+            MessageingModel message = JsonConvert.DeserializeObject<MessageingModel>(requestBody);
 
             // Validate if the message is null or empty
-            if (message == null || string.IsNullOrEmpty(message.Name))
+            if (message == null || string.IsNullOrEmpty(message.Id))
             {
                 return new BadRequestObjectResult("Please provide valid data in the request body.");
             }
@@ -46,7 +47,7 @@ namespace HttpFunctionApp
             try
             {
                 await _cosmoDB.SaveToCosmosDB(message);
-                string responseMessage = $"Hello, {message.Name}. This HTTP triggered function executed successfully.";
+                string responseMessage = $"Hello, {message.Message}. This HTTP triggered function executed successfully.";
 
                 return new OkObjectResult(responseMessage);
             }
@@ -66,10 +67,10 @@ namespace HttpFunctionApp
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
 
             // Deserialize the request body into MessagingModel
-            MessagingModel message = JsonConvert.DeserializeObject<MessagingModel>(requestBody);
+            MessageingModel message = JsonConvert.DeserializeObject<MessageingModel>(requestBody);
 
             // Validate if the message is null or empty
-            if (message == null || string.IsNullOrEmpty(message.Name))
+            if (message == null || string.IsNullOrEmpty(message.Id))
             {
                 return new BadRequestObjectResult("Please provide valid data in the request body.");
             }
@@ -78,7 +79,7 @@ namespace HttpFunctionApp
             try
             {
                 await _eventGrid.SendEventAsync(message);
-                string responseMessage = $"Hello, {message.Name}. This HTTP triggered function executed successfully.";
+                string responseMessage = $"Hello, {message.Message}. This HTTP triggered function executed successfully.";
 
                 return new OkObjectResult(responseMessage);
             }

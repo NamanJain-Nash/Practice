@@ -42,7 +42,7 @@ namespace DataBaseHandling.Services
                 var document = new
                 {
                     id = Guid.NewGuid().ToString(),
-                    data.message // Access data to be saved
+                    data.Message // Access data to be saved
                                            // Add more properties as needed
                 };
 

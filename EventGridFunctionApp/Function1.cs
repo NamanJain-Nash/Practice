@@ -8,6 +8,8 @@ using Azure.Messaging.EventGrid;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
+using Services.IServices;
+using DatabaseModel;
 
 namespace EventGridFunctionApp
 {
@@ -15,10 +17,15 @@ namespace EventGridFunctionApp
     {
         private readonly IStoargeQueueService _stoargeQueue;
         private readonly ICosmoDbService _cosmoDB;
-        public EventGridFunction(IStorageQueueService storageQueue,ICosmoDbService cosmoDbService) {
-            _storageQueue=storageQueue;
-            _cosmoDB=_cosmoDB;
-         }
+        private readonly IEventGridService _eventGrid;
+        private readonly ILogger _log;
+        public EventGridFunction(IStoargeQueueService storageQueue,ICosmoDbService cosmoDbService, ILogger log, IEventGridService eventGrid)
+        {
+            _stoargeQueue = storageQueue;
+            _cosmoDB = cosmoDbService;
+            _log = log;
+            _eventGrid = eventGrid;
+        }
         [FunctionName("TriggerByEventGrid")]
         public async Task<IActionResult> MessageHandlingForEventGrid(
             [EventGridTrigger] EventGridEvent eventGridEvent)
@@ -28,10 +35,10 @@ namespace EventGridFunctionApp
             string requestBody = eventGridEvent.Data.ToString();
 
             // Deserialize the request body into MessagingModel
-            MessagingModel message = JsonConvert.DeserializeObject<MessagingModel>(requestBody);
+            MessageingModel message = JsonConvert.DeserializeObject<MessageingModel>(requestBody);
 
             // Validate if the message is null or empty
-            if (message == null || string.IsNullOrEmpty(message.Name))
+            if (message == null || string.IsNullOrEmpty(message.Id))
             {
                 return new BadRequestObjectResult("Please provide valid data in the request body.");
             }
@@ -40,7 +47,7 @@ namespace EventGridFunctionApp
             try
             {
                 await _cosmoDB.SaveToCosmosDB(message);
-                string responseMessage = $"Hello, {message.Name}. This HTTP triggered function executed successfully.";
+                string responseMessage = $"Hello, {message.Message}. This HTTP triggered function executed successfully.";
 
                 return new OkObjectResult(responseMessage);
             }
@@ -48,10 +55,11 @@ namespace EventGridFunctionApp
             {
                 await _stoargeQueue.SendMessageToQueueAsync(message,ex.Message);
                     return new OkObjectResult(ex.Message);
-            }MessagingModel message = JsonConvert.DeserializeObject<MessagingModel>(requestBody);
+            }
+            message = JsonConvert.DeserializeObject<MessageingModel>(requestBody);
 
             // Validate if the message is null or empty
-            if (message == null || string.IsNullOrEmpty(message.Name))
+            if (message == null || string.IsNullOrEmpty(message.Id))
             {
                 return new BadRequestObjectResult("Please provide valid data in the request body.");
             }
@@ -60,7 +68,7 @@ namespace EventGridFunctionApp
             try
             {
                 await _eventGrid.SendEventAsync(message);
-                string responseMessage = $"Hello, {message.Name}. This HTTP triggered function executed successfully.";
+                string responseMessage = $"Hello, {message.Message}. This HTTP triggered function executed successfully.";
 
                 return new OkObjectResult(responseMessage);
             }

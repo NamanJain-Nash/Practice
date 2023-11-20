@@ -7,6 +7,8 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Services.IServices;
+using DatabaseModel;
 
 namespace MessageTriggerFunctionApp
 {
@@ -14,7 +16,6 @@ namespace MessageTriggerFunctionApp
     {
         private readonly ILogger _log;
         private readonly IStoargeQueueService _stoargeQueue;
-
         private readonly ICosmoDbService _cosmoDB;
         public MessageTriggerFunction(ILogger log, IStoargeQueueService stoargeQueue, ICosmoDbService _cosmoDB)
         {
@@ -32,10 +33,10 @@ namespace MessageTriggerFunctionApp
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
 
             // Deserialize the request body into MessagingModel
-            MessagingModel message = JsonConvert.DeserializeObject<MessagingModel>(requestBody);
+            MessageingModel message = JsonConvert.DeserializeObject<MessageingModel>(requestBody);
 
             // Validate if the message is null or empty
-            if (message == null || string.IsNullOrEmpty(message.Name))
+            if (message == null || string.IsNullOrEmpty(message.Id))
             {
                 return new BadRequestObjectResult("Please provide valid data in the request body.");
             }
@@ -44,7 +45,7 @@ namespace MessageTriggerFunctionApp
             try
             {
                 await _cosmoDB.SaveToCosmosDB(message);
-                string responseMessage = $"Hello, {message.Name}. This HTTP triggered function executed successfully.";
+                string responseMessage = $"Hello, {message.Id}. This HTTP triggered function executed successfully.";
 
                 return new OkObjectResult(responseMessage);
             }

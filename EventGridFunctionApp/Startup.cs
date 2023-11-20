@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataBaseHandling.Services;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Services.IServices;
+using Services.Services;
 
 namespace EventGridFunctionApp
 {
@@ -14,6 +19,7 @@ namespace EventGridFunctionApp
         {
             builder.Services.AddTransient<IStoargeQueueService, StoargeQueueService>();
             builder.Services.AddTransient<ICosmoDbService,CosmoDbService>();
+            builder.Services.AddTransient<IEventGridService, EventGridService>();
             builder.Services.AddLogging();
         }
         public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)
