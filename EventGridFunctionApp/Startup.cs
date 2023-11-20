@@ -19,7 +19,7 @@ namespace EventGridFunctionApp
         {
             builder.Services.AddTransient<IStoargeQueueService, StoargeQueueService>();
             builder.Services.AddTransient<ICosmoDbService,CosmoDbService>();
-            builder.Services.AddTransient<IEventHubService, EventHubService>();
+            builder.Services.AddTransient<IEventGridService, EventGridService>();
             builder.Services.AddLogging();
         }
         public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)
