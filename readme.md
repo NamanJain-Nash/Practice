@@ -12,7 +12,7 @@
 <p>2) The second is one that call and pass the data into the event grid</p>
 
 ## Azure Event Hub Trigger
-<p>This is the function that is called by the event hub as a reciver and also do the handling of saving the data to cosmos db and error to storage queue</p>
+<p>This is the function that is called by the event hub as a reciver and also do the handling of saving the data to cosmos db and error to storage queue present in folder EventHub</p>
 
 ## Services
 <p>The main are the services that are their to make the process be dependent and be reusable in nature and make the handling be done </p>
