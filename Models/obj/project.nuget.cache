@@ -1,8 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "G89aB5CsbLsC+P0K33dIIpCkJM9bo9iR1CWNW+8QZrILT8YzZ0gCberl9pjOAn/4T/a8toRTHSHVgvBogKLikA==",
+  "dgSpecHash": "yPUz/GvA1IkkVfVmVVsEDGZHhV2xJbdjBN5sjEwr8nASV3IUg43IhzE4KMODqlrjFekzLjs1u9kgjTLaQF3gxw==",
   "success": true,
-  "projectFilePath": "A:\\NashtechProject\\Project\\Practice\\Models\\DatabaseModel.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "/home/nashtech/work/AzureFunctionPractice/AzureFunction/Models/DatabaseModel.csproj",
+  "expectedPackageFiles": [
+    "/home/nashtech/.nuget/packages/microsoft.netcore.app.ref/6.0.25/microsoft.netcore.app.ref.6.0.25.nupkg.sha512",
+    "/home/nashtech/.nuget/packages/microsoft.aspnetcore.app.ref/6.0.25/microsoft.aspnetcore.app.ref.6.0.25.nupkg.sha512"
+  ],
   "logs": []
 }
